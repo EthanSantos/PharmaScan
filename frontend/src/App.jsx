@@ -6,6 +6,8 @@ import Signin from "./pages/Signin";
 import Signup from "./pages/Signup";
 import CameraApp from "./pages/cameraApp";
 import CompareMedicinePage from "./pages/match";
+import PillCounter from "./pages/count";
+
 const App = () => {
   return (
     <Router>
@@ -15,6 +17,7 @@ const App = () => {
         <Route path="/signin" element={<Signin />} />
         <Route path="/main" element={<CameraApp />} />
         <Route path="/compare" element={<CompareMedicinePage />} />
+        <Route path="/counter" element={<PillCounter />} />
       </Routes>
     </Router>
   );
