@@ -34,5 +34,8 @@ export default function CameraApp() {
             </div>
         </div>
     );
-}
+};
+
+export default CameraApp;
+
 

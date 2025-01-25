@@ -1,29 +1,19 @@
-import React, { useEffect, useState } from "react";
-import { 
-  BrowserRouter as Router, 
-  Routes, 
-  Route, 
-  Link, 
-  Navigate,
-  useParams,
-  Outlet 
-} from 'react-router-dom';
-import "./App.css"
-import Example from './pages/example'
-import CameraApp from './pages/cameraApp'
+import React from "react";
+import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
+import "./App.css";
 
+import Signin from "./pages/Signin";
+import Signup from "./pages/Signup";
+import CameraApp from "./pages/cameraApp";
 
-function App() {
+const App = () => {
   return (
     <Router>
-      <nav>
-        <Link to="/">Example</Link>
-        <Link to="/camera">Camera App</Link>
-      </nav>
-
       <Routes>
-        <Route path="/" element={<Example />} />
-        <Route path="/camera" element={<CameraApp />} />
+        <Route path="/" element={<Navigate to="/signin" replace />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/signin" element={<Signin />} />
+        <Route path="/main" element={<CameraApp />} />
       </Routes>
     </Router>
   );
