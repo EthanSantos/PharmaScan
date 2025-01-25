@@ -1,36 +1,21 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import "./App.css"
+import React from "react";
+import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
+import "./App.css";
+
+import Signin from "./pages/Signin";
+import Signup from "./pages/Signup";
+import CameraApp from "./pages/cameraApp";
 
 const App = () => {
-  const [data, setData] = useState(null);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    axios
-      .get("http://127.0.0.1:5000")
-      .then((response) => {
-        setData(response.data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        setError(err.message);
-        setLoading(false);
-      });
-  }, []);
-
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
-
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="p-8 bg-white rounded shadow text-center">
-        <pre className="bg-gray-200 p-4 rounded mt-2 text-gray-800">
-          {data.message}
-        </pre>
-      </div>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Navigate to="/signin" replace />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/signin" element={<Signin />} />
+        <Route path="/main" element={<CameraApp />} />
+      </Routes>
+    </Router>
   );
 };
 
