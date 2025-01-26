@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, Plus } from "lucide-react";
-import NavBar from "../components/Navbar"; // Adjust path as needed
+import NavBar from "../components/Navbar"; // Adjust path if needed
 import PillForm from "../components/PillForm";
 import PillList from "../components/PillList";
 
@@ -15,14 +15,15 @@ const UploadPage = () => {
 
   return (
     <div className="flex min-h-screen bg-gray-50 text-gray-800 font-sans">
-      {/* Left NavBar */}
+      {/* Left NavBar (sticky) */}
       <NavBar />
 
       {/* Main area */}
       <div className="flex-1 flex flex-col">
         {/*
-          We define a main header that has the same height (h-16)
-          and a border-b so it lines up horizontally with the brand in NavBar.
+          Top header bar: 
+          - same height as NavBar brand area (h-16)
+          - border-b for a clean line
         */}
         <header className="h-16 bg-white border-b border-gray-200 px-4 flex items-center justify-between">
           <h2 className="text-lg font-medium text-gray-900">
@@ -35,8 +36,8 @@ const UploadPage = () => {
               <input
                 type="text"
                 placeholder="Search pills..."
-                className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 
-                  focus:ring-blue-500 w-64 text-sm text-gray-700"
+                className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg 
+                  focus:ring-2 focus:ring-blue-500 w-64 text-sm text-gray-700"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
@@ -59,24 +60,23 @@ const UploadPage = () => {
           </div>
         </header>
 
-        {/* Content Area */}
-        <main className="flex-grow max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8">
+        {/* Scrollable content area */}
+        <main className="flex-grow overflow-y-auto p-4 sm:p-6 lg:p-8">
           <PillList
             newPill={newPill}
             searchTerm={searchTerm}
-            setSearchTerm={setSearchTerm}
           />
         </main>
 
-        {/* Modal */}
+        {/* Modal for adding pills */}
         <AnimatePresence>
           {isModalOpen && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/25 backdrop-blur-sm flex 
-                items-center justify-center p-4 z-50"
+              className="fixed inset-0 bg-black/25 backdrop-blur-sm 
+                flex items-center justify-center p-4 z-50"
             >
               <motion.div
                 initial={{ scale: 0.9, opacity: 0 }}
