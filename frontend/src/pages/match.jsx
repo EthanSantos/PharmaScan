@@ -1,29 +1,29 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import axios from 'axios';
+import api from "../services/api";
 
 export default function CompareMedicinePage() {
     const navigate = useNavigate();
     const location = useLocation();
     const { image, medicine } = location.state || {};  // Access data from state
-    const [ image2, setImage2] = useState(null);
+    const [image2, setImage2] = useState(null);
     const [isMatch, setIsMatch] = useState(null);
 
 
     const compareImages = () => {
         // Placeholder logic for comparison; replace with actual algorithm if needed
         setIsMatch(null);
-            navigate("/counter");
+        navigate("/counter");
     };
 
-    axios.get(`http://localhost:5000/api/${medicine}`)
-    .then(response => {
-        console.log(response.data[0]["image_url"])
-        
-        setImage2(response.data[0]["image_url"])
-    }).catch( err => {
-        console.error(err)
-    });
+    api.get(`/${medicine}`)
+        .then((response) => {
+            console.log(response.data[0]["image_url"]);
+            setImage2(response.data[0]["image_url"]); // Update state with the image URL
+        })
+        .catch((err) => {
+            console.error(err); // Log any errors
+        });
 
     return (
         <div className="min-h-screen bg-gray-100 p-8 flex flex-col items-center">
