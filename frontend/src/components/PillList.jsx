@@ -2,9 +2,8 @@ import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "../supabaseConfig";
 import PillCard from "./PillCard";
-import { Search } from "lucide-react";
 
-const PillList = ({ newPill, searchTerm, setSearchTerm }) => {
+const PillList = ({ newPill, searchTerm }) => {
     const [pills, setPills] = useState([]);
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);

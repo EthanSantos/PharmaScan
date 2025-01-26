@@ -15,11 +15,6 @@ const UploadPage = () => {
     const openModal = () => setIsModalOpen(true)
     const closeModal = () => setIsModalOpen(false)
 
-    const fetchPills = async () => {
-        // This function is empty because PillList handles the actual fetching
-        // It's here to trigger a re-render of PillList when a new pill is added
-    }
-
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col font-sans">
             <header className="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-20">
@@ -72,7 +67,7 @@ const UploadPage = () => {
                 </div>
             </header>
 
-            <main className="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <main className="flex-grow max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8">
                 <PillList newPill={newPill} searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
             </main>
 
@@ -108,4 +103,3 @@ const UploadPage = () => {
 }
 
 export default UploadPage
-
