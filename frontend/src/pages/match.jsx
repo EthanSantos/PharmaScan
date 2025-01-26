@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import OpenAI from "openai";
+import api from "../services/api";
 
 export default function CompareMedicinePage() {
   const navigate = useNavigate();
@@ -72,6 +73,14 @@ export default function CompareMedicinePage() {
 
     fetchData();
   }, [image, image2, medicine]); // This will run whenever `medicine` changes
+    api.get(`/${medicine}`)
+        .then((response) => {
+            console.log(response.data[0]["image_url"]);
+            setImage2(response.data[0]["image_url"]); // Update state with the image URL
+        })
+        .catch((err) => {
+            console.error(err); // Log any errors
+        });
 
   return (
     <div className="min-h-screen bg-gray-100 p-8 flex flex-col items-center">
