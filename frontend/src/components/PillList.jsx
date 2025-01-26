@@ -4,10 +4,9 @@ import { supabase } from "../supabaseConfig";
 import PillCard from "./PillCard";
 import { Search } from "lucide-react";
 
-const PillList = ({ newPill }) => {
+const PillList = ({ newPill, searchTerm, setSearchTerm }) => {
     const [pills, setPills] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedPill, setSelectedPill] = useState(null);
     const pillsPerPage = 9;
@@ -69,19 +68,6 @@ const PillList = ({ newPill }) => {
     return (
         <div className="bg-gray-50 min-h-screen font-sans">
             <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                <div className="max-w-md mx-auto mb-8 relative">
-                    <div className="relative shadow-md rounded-lg overflow-hidden bg-white border border-gray-300">
-                        <input
-                            type="text"
-                            placeholder="Search for pills..."
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-full px-5 py-3 pl-12 bg-white text-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 ease-in-out placeholder-gray-500"
-                        />
-                        <Search className="absolute left-4 top-3 h-6 w-6 text-gray-500 pointer-events-none" />
-                    </div>
-                </div>
-
 
                 {filteredPills.length === 0 ? (
                     <p className="text-center text-gray-600 text-lg">No pills found.</p>

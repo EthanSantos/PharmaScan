@@ -3,11 +3,12 @@ import { useNavigate } from "react-router-dom"
 import { motion, AnimatePresence } from "framer-motion"
 import PillForm from "../components/PillForm"
 import PillList from "../components/PillList"
-import { Plus, ArrowLeft } from "lucide-react"
+import { Plus, ArrowLeft, Search } from "lucide-react"
 
 const UploadPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [newPill, setNewPill] = useState(null);
+    const [searchTerm, setSearchTerm] = useState("");
 
     const navigate = useNavigate()
 
@@ -21,24 +22,48 @@ const UploadPage = () => {
 
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col font-sans">
-            <header className="bg-white shadow-sm sticky top-0 z-10">
+            <header className="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-20">
                 <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
-                    <h1 className="text-2xl font-semibold text-gray-900">Pill Database</h1>
-                    <div className="flex space-x-4">
+                    <div className="flex items-center space-x-4">
                         <motion.button
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
                             onClick={() => navigate("/")}
-                            className="bg-white text-gray-800 py-2 px-4 rounded-md font-medium border border-gray-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition duration-150 ease-in-out shadow-sm flex items-center"
+                            className="text-gray-600 hover:text-gray-900 transition-colors"
                         >
-                            <ArrowLeft className="w-5 h-5 mr-2" />
-                            Back
+                            <ArrowLeft className="w-6 h-6" />
                         </motion.button>
+                        <h1 className="text-2xl font-semibold text-gray-900">
+                            Pill Database
+                        </h1>
+                    </div>
+
+                    <div className="flex space-x-4 items-center">
+                        <motion.div
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.2 }}
+                        >
+                            <div className="relative">
+                                <input
+                                    type="text"
+                                    placeholder="Search pills..."
+                                    className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 w-64"
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                />
+                                <Search
+                                    className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                                    size={20}
+                                />
+                            </div>
+                        </motion.div>
+
                         <motion.button
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
                             onClick={openModal}
-                            className="bg-blue-500 text-white py-2 px-4 rounded-md font-medium hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out shadow-sm flex items-center"
+                            className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors flex items-center"
                         >
                             <Plus className="w-5 h-5 mr-2" />
                             Add Pill
@@ -48,7 +73,7 @@ const UploadPage = () => {
             </header>
 
             <main className="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                <PillList newPill={newPill} />
+                <PillList newPill={newPill} searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
             </main>
 
             <AnimatePresence>
