@@ -7,6 +7,8 @@ import Signup from "./pages/Signup";
 import CameraApp from "./pages/cameraApp";
 import UploadPage from "./pages/UploadPage"
 import HomePage from "./pages/Home";
+import CompareMedicinePage from "./pages/match";
+import PillCounter from "./pages/count";
 
 const App = () => {
   return (
@@ -18,6 +20,9 @@ const App = () => {
         <Route path="/signin" element={<Signin />} />
         <Route path="/camera" element={<CameraApp />} />
         <Route path="/upload" element={<UploadPage />} />
+        <Route path="/main" element={<CameraApp />} />
+        <Route path="/compare" element={<CompareMedicinePage />} />
+        <Route path="/counter" element={<PillCounter />} />
       </Routes>
     </Router>
   );
