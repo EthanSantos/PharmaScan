@@ -5,6 +5,7 @@ import { faCheckCircle, faExclamationCircle, faCloudUploadAlt } from "@fortaweso
 
 const PillForm = ({ closeModal, onPillAdded }) => {
     const [name, setName] = useState("");
+    const [description, setDescription] = useState("");
     const [image, setImage] = useState(null);
     const [success, setSuccess] = useState("");
     const [error, setError] = useState("");
@@ -16,6 +17,7 @@ const PillForm = ({ closeModal, onPillAdded }) => {
 
         const formData = new FormData();
         formData.append("name", name);
+        formData.append("description", description);
         if (image) {
             formData.append("image", image);
         }
@@ -28,7 +30,7 @@ const PillForm = ({ closeModal, onPillAdded }) => {
             setTimeout(() => {
                 setSuccess("");
                 closeModal();
-                onPillAdded({ name, image_url }); // Call the callback with the new pill
+                onPillAdded({ name, description, image_url }); // Call the callback with the new pill
             }, 2000);
         } catch (err) {
             setError("Failed to upload pill. Please try again.");
@@ -53,6 +55,20 @@ const PillForm = ({ closeModal, onPillAdded }) => {
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 focus:outline-none shadow-sm transition duration-150 ease-in-out"
                         required
                     />
+                </div>
+                <div>
+                    <label htmlFor="pillDescription" className="block text-sm font-medium text-gray-700 mb-1">
+                        Description
+                    </label>
+                    <textarea
+                        id="pillDescription"
+                        placeholder="Enter pill description"
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 focus:outline-none shadow-sm transition duration-150 ease-in-out"
+                        rows="3"
+                        required
+                    ></textarea>
                 </div>
                 <div>
                     <label htmlFor="pillImage" className="block text-sm font-medium text-gray-700 mb-1">

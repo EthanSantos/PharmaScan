@@ -38,12 +38,14 @@ def upload_pill():
         # Get form data
         name = request.form.get("name")
         file = request.files.get("image")
+        description = request.form.get("description")
 
-        if not name or not file:
-            return jsonify({"error": "Missing name or image"}), 400
+        if not name or not file or not description:
+            return jsonify({"error": "Missing name, image or description"}), 400
 
         print(f"Received name: {name}")
         print(f"Received file: {file.filename}")
+        print(f"Received description: {description}")
 
         # Upload image to S3 with public-read ACL
         filename = secure_filename(file.filename)
@@ -60,54 +62,7 @@ def upload_pill():
         print(f"Public URL generated: {file_url}")
 
         # Store pill info in Supabase
-        payload = {"name": name, "image_url": file_url}
-        supabase_response = requests.post(
-            f"{SUPABASE_URL}/rest/v1/{SUPABASE_TABLE}",
-            headers=supabase_headers,
-            json=payload,
-        )
-
-        if supabase_response.status_code != 201:
-            print(f"Supabase Error: {supabase_response.json()}")
-            return jsonify({"error": "Failed to save pill info to Supabase"}), 500
-
-        return jsonify({"message": "Pill uploaded successfully", "image_url": file_url}), 200
-
-    except Exception as e:
-        print(f"Error: {e}")
-        return jsonify({"error": str(e)}), 500
-
-    try:
-        # Get form data
-        name = request.form.get("name")
-        file = request.files.get("image")
-
-        if not name or not file:
-            return jsonify({"error": "Missing name or image"}), 400
-
-        print(f"Received name: {name}")
-        print(f"Received file: {file.filename}")
-
-        # Upload image to S3
-        filename = secure_filename(file.filename)
-        s3.upload_fileobj(
-            file,
-            BUCKET_NAME,
-            filename,
-            ExtraArgs={"ContentType": file.content_type},
-        )
-
-        # Generate a pre-signed URL for the uploaded file
-        file_url = s3.generate_presigned_url(
-            "get_object",
-            Params={"Bucket": BUCKET_NAME, "Key": filename},
-            ExpiresIn=3600,  # URL valid for 1 hour
-        )
-
-        print(f"Pre-signed URL generated: {file_url}")
-
-        # Store pill info in Supabase
-        payload = {"name": name, "image_url": file_url}
+        payload = {"name": name, "image_url": file_url, "description": description}
         supabase_response = requests.post(
             f"{SUPABASE_URL}/rest/v1/{SUPABASE_TABLE}",
             headers=supabase_headers,
