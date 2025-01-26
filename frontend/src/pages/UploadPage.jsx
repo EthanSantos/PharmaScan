@@ -1,107 +1,86 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import PillForm from "../components/PillForm";
-import { supabase } from "../supabaseConfig";
+import React, { useState } from "react"
+import { useNavigate } from "react-router-dom"
+import { motion, AnimatePresence } from "framer-motion"
+import PillForm from "../components/PillForm"
+import PillList from "../components/PillList"
+import { Plus, ArrowLeft } from "lucide-react"
 
 const UploadPage = () => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [pills, setPills] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [isModalOpen, setIsModalOpen] = useState(false)
+    const [newPill, setNewPill] = useState(null);
 
-    const navigate = useNavigate();
+    const navigate = useNavigate()
 
-    const openModal = () => setIsModalOpen(true);
-    const closeModal = () => setIsModalOpen(false);
+    const openModal = () => setIsModalOpen(true)
+    const closeModal = () => setIsModalOpen(false)
 
-    // Fetch pills from Supabase
     const fetchPills = async () => {
-        setLoading(true);
-        const { data, error } = await supabase.from("pills").select("*");
-        if (error) {
-            console.error("Error fetching pills:", error);
-        } else {
-            setPills(data);
-        }
-        setLoading(false);
-    };
-
-    // Fetch pills on component mount
-    useEffect(() => {
-        fetchPills();
-    }, []);
+        // This function is empty because PillList handles the actual fetching
+        // It's here to trigger a re-render of PillList when a new pill is added
+    }
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-gray-100 to-white flex flex-col items-center justify-start py-12 px-4 sm:px-6 lg:px-8">
-            <h1 className="text-4xl font-semibold text-gray-900 mb-8">Pill Database</h1>
-            <div className="mb-6 flex space-x-4">
-                <button
-                    onClick={() => navigate("/")}
-                    className="bg-gray-200 text-gray-700 py-2 px-6 rounded-lg font-medium hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 transition duration-150 ease-in-out shadow-md"
-                >
-                    Back to Home
-                </button>
-                <button
-                    onClick={openModal}
-                    className="bg-blue-500 text-white py-3 px-8 rounded-lg font-medium hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 transition duration-150 ease-in-out shadow-md"
-                >
-                    Add Pill
-                </button>
-            </div>
-
-            {/* Modal for PillForm */}
-            {isModalOpen && (
-                <div className="fixed inset-0 bg-black/25 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-                    <div className="bg-white rounded-2xl shadow-xl max-w-md w-full p-6 relative">
-                        <button
-                            onClick={closeModal}
-                            className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 focus:outline-none"
+        <div className="min-h-screen bg-gray-50 flex flex-col font-sans">
+            <header className="bg-white shadow-sm sticky top-0 z-10">
+                <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+                    <h1 className="text-2xl font-semibold text-gray-900">Pill Database</h1>
+                    <div className="flex space-x-4">
+                        <motion.button
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                            onClick={() => navigate("/")}
+                            className="bg-white text-gray-800 py-2 px-4 rounded-md font-medium border border-gray-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition duration-150 ease-in-out shadow-sm flex items-center"
                         >
-                            <svg
-                                className="h-6 w-6"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M6 18L18 6M6 6l12 12"
-                                />
-                            </svg>
-                        </button>
-                        <PillForm closeModal={closeModal} fetchPills={fetchPills} />
+                            <ArrowLeft className="w-5 h-5 mr-2" />
+                            Back
+                        </motion.button>
+                        <motion.button
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                            onClick={openModal}
+                            className="bg-blue-500 text-white py-2 px-4 rounded-md font-medium hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out shadow-sm flex items-center"
+                        >
+                            <Plus className="w-5 h-5 mr-2" />
+                            Add Pill
+                        </motion.button>
                     </div>
                 </div>
-            )}
+            </header>
 
-            {/* Pill List */}
-            <div className="mt-8 w-full max-w-4xl">
-                <h2 className="text-2xl font-semibold text-gray-800 mb-4">Pill List</h2>
-                {loading ? (
-                    <p className="text-gray-700 text-center">Loading pills...</p>
-                ) : pills.length === 0 ? (
-                    <p className="text-center text-gray-600">No pills found.</p>
-                ) : (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {pills.map((pill) => (
-                            <div
-                                key={pill.id}
-                                className="bg-white shadow-lg rounded-lg overflow-hidden flex flex-col items-center p-4"
+            <main className="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                <PillList newPill={newPill} />
+            </main>
+
+            <AnimatePresence>
+                {isModalOpen && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 bg-black/25 backdrop-blur-sm flex items-center justify-center p-4 z-50"
+                    >
+                        <motion.div
+                            initial={{ scale: 0.9, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.9, opacity: 0 }}
+                            className="bg-white rounded-lg shadow-xl max-w-md w-full p-6 relative"
+                        >
+                            <button
+                                onClick={closeModal}
+                                className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 focus:outline-none"
                             >
-                                <img
-                                    src={pill.image_url}
-                                    alt={pill.name}
-                                    className="w-full h-40 object-cover rounded-md mb-4"
-                                />
-                                <h2 className="text-lg font-medium text-gray-800">{pill.name}</h2>
-                            </div>
-                        ))}
-                    </div>
+                                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                            <PillForm closeModal={closeModal} onPillAdded={setNewPill} />
+                        </motion.div>
+                    </motion.div>
                 )}
-            </div>
+            </AnimatePresence>
         </div>
-    );
-};
+    )
+}
 
-export default UploadPage;
+export default UploadPage
+

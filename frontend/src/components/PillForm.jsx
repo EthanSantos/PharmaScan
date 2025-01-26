@@ -3,7 +3,7 @@ import api from "../services/api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheckCircle, faExclamationCircle, faCloudUploadAlt } from "@fortawesome/free-solid-svg-icons";
 
-const PillForm = ({ closeModal, fetchPills }) => {
+const PillForm = ({ closeModal, onPillAdded }) => {
     const [name, setName] = useState("");
     const [image, setImage] = useState(null);
     const [success, setSuccess] = useState("");
@@ -28,7 +28,7 @@ const PillForm = ({ closeModal, fetchPills }) => {
             setTimeout(() => {
                 setSuccess("");
                 closeModal();
-                fetchPills(); // Refresh pill list
+                onPillAdded({ name, image_url }); // Call the callback with the new pill
             }, 2000);
         } catch (err) {
             setError("Failed to upload pill. Please try again.");

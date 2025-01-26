@@ -32,7 +32,6 @@ supabase_headers = {
     "Content-Type": "application/json",
 }
 
-
 @app.route("/api/upload", methods=["POST"])
 def upload_pill():
     try:
