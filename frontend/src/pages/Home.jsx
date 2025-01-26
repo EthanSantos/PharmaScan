@@ -104,10 +104,10 @@ const HomePage = () => {
           <section>
             <div className="bg-white rounded-md border border-gray-200 p-6 shadow-sm">
               <h3 className="text-2xl font-semibold text-gray-800">
-                How the Camera Page Works
+                Camera Workflow
               </h3>
               <p className="text-gray-600 text-sm mt-1">
-                Follow these steps to verify your pill with YOLOv8:
+                Follow these steps to verify your pills.
               </p>
 
               {/* Horizontal step flow with arrows */}
@@ -144,7 +144,7 @@ const HomePage = () => {
                     3. YOLOv8 Counting
                   </h4>
                   <p className="text-gray-500">
-                    AI identifies the number of pills, ensuring accuracy.
+                    Real-time AI identifies the number of pills, ensuring accuracy.
                   </p>
                 </div>
 
@@ -196,16 +196,43 @@ const HomePage = () => {
 
 
           {/* Another Section (Optional) */}
-          <section>
-            <div className="bg-white rounded-md border border-gray-200 p-6 shadow-sm">
-              <h3 className="text-xl font-semibold text-gray-800">
-                Pill Database Overview
-              </h3>
-              <p className="text-sm text-gray-500 mt-2">
-                A quick summary or instructions for how to manage pills in
-                the database. You can link directly to the Pill Database page
-                to add or edit pills.
-              </p>
+          <section className="bg-white rounded-md border border-gray-200 p-6 shadow-sm">
+            <h3 className="text-2xl font-semibold text-gray-800">Our Tech Stack</h3>
+            <p className="text-gray-600 text-sm mt-1">
+              PharmaScan is built using the following technologies:
+            </p>
+
+            <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="border border-gray-200 bg-white rounded p-4">
+                <h4 className="text-lg font-semibold text-gray-800">Front-end</h4>
+                <ul className="text-sm text-gray-500 mt-2 space-y-1">
+                  <li>Vite + React</li>
+                  <li>Tailwind CSS</li>
+                </ul>
+              </div>
+
+              <div className="border border-gray-200 bg-white rounded p-4">
+                <h4 className="text-lg font-semibold text-gray-800">Computer Vision</h4>
+                <ul className="text-sm text-gray-500 mt-2 space-y-1">
+                  <li>YOLOv8 for pill detection</li>
+                </ul>
+              </div>
+
+              <div className="border border-gray-200 bg-white rounded p-4">
+                <h4 className="text-lg font-semibold text-gray-800">Back-end</h4>
+                <ul className="text-sm text-gray-500 mt-2 space-y-1">
+                  <li>Flask API</li>
+                  <li>AWS S3 for image storage</li>
+                </ul>
+              </div>
+
+              <div className="border border-gray-200 bg-white rounded p-4">
+                <h4 className="text-lg font-semibold text-gray-800">Databases</h4>
+                <ul className="text-sm text-gray-500 mt-2 space-y-1">
+                  <li>Supabase for pill data</li>
+                  <li>Firebase for user authentication</li>
+                </ul>
+              </div>
             </div>
           </section>
         </div>
