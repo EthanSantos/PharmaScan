@@ -5,6 +5,7 @@ import requests
 from werkzeug.utils import secure_filename
 from flask_cors import CORS
 from dotenv import load_dotenv
+from openai import OpenAI
 
 # Load environment variables
 load_dotenv()

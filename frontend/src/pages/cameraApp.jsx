@@ -10,6 +10,7 @@ export default function CameraApp() {
   const videoRef = useRef(null); // Create videoRef to point to the video element
   const streamRef = useRef(null); // To store the media stream
   const canvasRef = useRef(null); // Reference to canvas for capturing the image
+  const [imageId, setImageId] = useState("");
 
   // Start camera function
   const startCamera = async () => {
@@ -39,17 +40,26 @@ export default function CameraApp() {
   const capturePhoto = () => {
     const canvas = canvasRef.current;
     const context = canvas.getContext("2d");
-
+  
     // Set canvas dimensions to match video
     canvas.width = videoRef.current.videoWidth;
     canvas.height = videoRef.current.videoHeight;
-
+  
     // Draw the current video frame to the canvas
     context.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
-
+  
     // Convert the canvas to a base64 image string
     const imageData = canvas.toDataURL("image/png");
-    setCapturedImage(imageData); // Store the captured image
+  
+    // Create a unique ID (you could use any method here)
+    const imageIdNew = `image_${new Date().getTime()}`;
+  
+    // Save the image in localStorage with the unique ID
+    localStorage.clear();
+    localStorage.setItem(imageIdNew, imageData);
+    console.log(imageIdNew);
+    setCapturedImage(imageData); // Store the captured image in state
+    setImageId(imageIdNew);
     stopCamera();
   };
 
@@ -58,7 +68,7 @@ export default function CameraApp() {
     if (medication === "") {
       alert("Insert a value");
     } else {
-      navigate("/compare", { state: { image: capturedImage, medicine: medication } });
+      navigate("/compare", { state: { imageId: imageId, medicine: medication } });
       setIsModalOpen(false);
       setMedication("");
     }
