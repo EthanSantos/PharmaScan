@@ -102,7 +102,15 @@ const PillList = ({ newPill, searchTerm }) => {
             </main>
 
             {/* Modal */}
-            <PillModal isOpen={!!selectedPill} onClose={closeModal} pill={selectedPill} />
+            <PillModal
+                isOpen={!!selectedPill}
+                onClose={closeModal}
+                pill={selectedPill}
+                onDelete={(deletedId) =>
+                    setPills((prevPills) => prevPills.filter((pill) => pill.id !== deletedId))
+                }
+            />
+
         </div>
     );
 };
