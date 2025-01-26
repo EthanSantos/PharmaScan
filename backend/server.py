@@ -5,6 +5,7 @@ import requests
 from werkzeug.utils import secure_filename
 from flask_cors import CORS
 from dotenv import load_dotenv
+from openai import OpenAI
 
 # Load environment variables
 load_dotenv()
@@ -99,8 +100,6 @@ def get_pill(name):
     else:
         # Handle the error case
         return jsonify({"error": "Failed to fetch data", "details": response.text}), response.status_code
-
-    
 
 
 if __name__ == "__main__":
