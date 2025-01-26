@@ -39,10 +39,10 @@ const HomePage = () => {
             <div className="w-full max-w-md text-center mb-8">
                 {/* Greeting */}
                 <h1 className="text-4xl font-semibold text-gray-900 tracking-tight">
-                    Hello, <span className="text-blue-600">{userName}</span>
+                    Hello, <span className="text-blue-600">{userName}!</span>
                 </h1>
                 <p className="text-gray-500 mt-4 text-lg">
-                    Intelligent Medication Tracking
+                    Medication Tracker
                 </p>
             </div>
 
