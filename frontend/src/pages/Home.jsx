@@ -63,7 +63,7 @@ const HomePage = () => {
           <section>
             <div className="bg-white rounded-md border border-gray-200 p-6 shadow-sm">
               <h3 className="text-2xl font-semibold text-gray-800">
-                Featured Medication Works
+                Featured Medication
               </h3>
               <p className="text-gray-600 text-sm mt-1">
                 Discover newly added or commonly used pills from our database.
