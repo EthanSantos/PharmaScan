@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import axios from 'axios';
 
 export default function CompareMedicinePage() {
     const navigate = useNavigate();
@@ -7,13 +8,7 @@ export default function CompareMedicinePage() {
     const { image, medicine } = location.state || {};  // Access data from state
     const [ image2, setImage2] = useState(null);
     const [isMatch, setIsMatch] = useState(null);
-    console.log(image)
-    const handleImageUpload = (e, setImage) => {
-        const file = e.target.files[0];
-        if (file) {
-            setImage(URL.createObjectURL(file));
-        }
-    };
+
 
     const compareImages = () => {
         // Placeholder logic for comparison; replace with actual algorithm if needed
@@ -21,18 +16,25 @@ export default function CompareMedicinePage() {
             navigate("/counter");
     };
 
+    axios.get(`http://localhost:5000/api/${medicine}`)
+    .then(response => {
+        console.log(response.data[0]["image_url"])
+        
+        setImage2(response.data[0]["image_url"])
+    }).catch( err => {
+        console.error(err)
+    });
+
     return (
         <div className="min-h-screen bg-gray-100 p-8 flex flex-col items-center">
             <h1 className="text-3xl font-bold text-gray-800 mb-6">Medicine Comparison</h1>
 
             <div className="grid grid-cols-2 gap-8">
-                <div className="bg-white p-6 rounded-lg shadow-lg">
+                <div className="flex justify-center items-center bg-white p-6 rounded-lg shadow-lg">
                     {image && <img src={image} alt="First Medicine" className="mt-4 rounded-lg shadow-md" />}
                 </div>
 
-                <div className="bg-white p-6 rounded-lg shadow-lg">
-                    <h2 className="text-xl font-semibold mb-4 text-gray-700">Upload Second Image</h2>
-                    <input type="file" accept="image/*" onChange={(e) => handleImageUpload(e, setImage2)} />
+                <div className="flex justify-center items-center bg-white p-6 rounded-lg shadow-lg">
                     {image2 && <img src={image2} alt="Second Medicine" className="mt-4 rounded-lg shadow-md" />}
                 </div>
             </div>

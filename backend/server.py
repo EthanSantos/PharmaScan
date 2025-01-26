@@ -82,6 +82,26 @@ def upload_pill():
         print(f"Error: {e}")
         return jsonify({"error": str(e)}), 500
 
+@app.route("/api/<name>", methods=["GET"])
+def get_pill(name):
+    # Prepare the query parameters (filter by 'name')
+    params = {
+        "name": f"eq.{name}",  # Filter by 'name' column in the Supabase table
+    }
+
+    # Send GET request to Supabase
+    response = requests.get(f"{SUPABASE_URL}/rest/v1/{SUPABASE_TABLE}", headers=supabase_headers, params=params)
+
+    # Check if the request was successful
+    if response.status_code == 200:
+        # Parse the JSON response and return it
+        return jsonify(response.json())
+    else:
+        # Handle the error case
+        return jsonify({"error": "Failed to fetch data", "details": response.text}), response.status_code
+
+    
+
 
 if __name__ == "__main__":
     app.run(debug=True)
