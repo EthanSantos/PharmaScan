@@ -59,34 +59,6 @@ const PillCounter = () => {
         <main className="flex-1 flex flex-col p-4 md:p-6 overflow-hidden">
           <div className="flex flex-col h-full space-y-4">
             {/* Webcam Section */}
-            <section
-              className={`bg-white p-4 rounded-lg shadow border border-gray-200 flex flex-col transition-all duration-300 ${isCameraOn ? "flex-none h-2/3" : "flex-grow h-3/4"
-                }`}
-            >
-              <div className="flex-1 bg-gray-50 rounded-lg flex items-center justify-center overflow-hidden">
-                {isCameraOn ? (
-                  <video
-                    ref={videoRef}
-                    autoPlay
-                    playsInline
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <p className="text-gray-500 text-center">
-                    Camera feed will appear here
-                  </p>
-                )}
-              </div>
-              <button
-                onClick={() => setIsCameraOn(!isCameraOn)}
-                className={`mt-4 py-2 px-6 rounded-md text-white font-medium transition-colors ${isCameraOn
-                    ? "bg-red-500 hover:bg-red-600"
-                    : "bg-blue-500 hover:bg-blue-600"
-                  }`}
-              >
-                {isCameraOn ? "Turn Off Camera" : "Turn On Camera"}
-              </button>
-            </section>
 
             {/* Live Video Feed */}
             <div>
