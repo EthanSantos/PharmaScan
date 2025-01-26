@@ -50,6 +50,7 @@ export default function CameraApp() {
     // Convert the canvas to a base64 image string
     const imageData = canvas.toDataURL("image/png");
     setCapturedImage(imageData); // Store the captured image
+    stopCamera();
   };
 
   // Submit function for medication
@@ -57,7 +58,7 @@ export default function CameraApp() {
     if (medication === "") {
       alert("Insert a value");
     } else {
-      navigate("/compare");
+      navigate("/compare", { state: { image: capturedImage, medicine: medication } });
       setIsModalOpen(false);
       setMedication("");
     }
@@ -68,7 +69,7 @@ export default function CameraApp() {
       <div className="max-width">
         <div className="bg-white shadow-lg rounded-2xl p-6">
           <h1 className="text-2xl font-bold text-gray-800">Camera</h1>
-          <div className="mt-4 h-[500px] bg-gray-200 rounded-lg flex items-center justify-center">
+          <div className="mt-4 h-[500px] w-full bg-gray-200 rounded-lg flex items-center justify-center">
             <video
               ref={videoRef} // Attach ref to video element
               autoPlay
@@ -97,7 +98,10 @@ export default function CameraApp() {
         </button>
         <button
           className="bg-green-500 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-green-600 transition"
-          onClick={capturePhoto} // Capture photo when clicked
+          onClick={() => {
+            capturePhoto(); // Call the capturePhoto function
+            setIsModalOpen(true); // Open the modal
+          }}// Capture photo when clicked
         >
           Capture
         </button>
