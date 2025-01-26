@@ -1,50 +1,47 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import axios from 'axios';
+
 export default function CompareMedicinePage() {
     const navigate = useNavigate();
-    const [image1, setImage1] = useState(null);
-    const [image2, setImage2] = useState(null);
-    const [medicineInfo, setMedicineInfo] = useState("This is sample medicine information.");
+    const location = useLocation();
+    const { image, medicine } = location.state || {};  // Access data from state
+    const [ image2, setImage2] = useState(null);
     const [isMatch, setIsMatch] = useState(null);
 
-    const handleImageUpload = (e, setImage) => {
-        const file = e.target.files[0];
-        if (file) {
-            setImage(URL.createObjectURL(file));
-        }
-    };
 
     const compareImages = () => {
         // Placeholder logic for comparison; replace with actual algorithm if needed
-        if (image1 && image2) {
-            setIsMatch(image1 === image2);
-        } else {
-            setIsMatch(null);
+        setIsMatch(null);
             navigate("/counter");
-        }
     };
+
+    axios.get(`http://localhost:5000/api/${medicine}`)
+    .then(response => {
+        console.log(response.data[0]["image_url"])
+        
+        setImage2(response.data[0]["image_url"])
+    }).catch( err => {
+        console.error(err)
+    });
 
     return (
         <div className="min-h-screen bg-gray-100 p-8 flex flex-col items-center">
             <h1 className="text-3xl font-bold text-gray-800 mb-6">Medicine Comparison</h1>
 
             <div className="grid grid-cols-2 gap-8">
-                <div className="bg-white p-6 rounded-lg shadow-lg">
-                    <h2 className="text-xl font-semibold mb-4 text-gray-700">Upload First Image</h2>
-                    <input type="file" accept="image/*" onChange={(e) => handleImageUpload(e, setImage1)} />
-                    {image1 && <img src={image1} alt="First Medicine" className="mt-4 rounded-lg shadow-md" />}
+                <div className="flex justify-center items-center bg-white p-6 rounded-lg shadow-lg">
+                    {image && <img src={image} alt="First Medicine" className="mt-4 rounded-lg shadow-md" />}
                 </div>
 
-                <div className="bg-white p-6 rounded-lg shadow-lg">
-                    <h2 className="text-xl font-semibold mb-4 text-gray-700">Upload Second Image</h2>
-                    <input type="file" accept="image/*" onChange={(e) => handleImageUpload(e, setImage2)} />
+                <div className="flex justify-center items-center bg-white p-6 rounded-lg shadow-lg">
                     {image2 && <img src={image2} alt="Second Medicine" className="mt-4 rounded-lg shadow-md" />}
                 </div>
             </div>
 
             <div className="mt-8 w-full max-w-2xl bg-white p-6 rounded-lg shadow-lg">
                 <h2 className="text-xl font-semibold text-gray-700 mb-4">Medicine Information</h2>
-                <p className="text-gray-600">{medicineInfo}</p>
+                <p className="text-gray-600">{medicine}</p>
             </div>
 
             <button
