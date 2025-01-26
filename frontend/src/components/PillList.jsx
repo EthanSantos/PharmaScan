@@ -70,17 +70,18 @@ const PillList = ({ newPill }) => {
         <div className="bg-gray-50 min-h-screen font-sans">
             <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 <div className="max-w-md mx-auto mb-8 relative">
-                    <div className="relative shadow-md rounded-lg overflow-hidden">
+                    <div className="relative shadow-md rounded-lg overflow-hidden bg-white border border-gray-300">
                         <input
                             type="text"
                             placeholder="Search for pills..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-full px-5 py-3 pl-12 bg-gray-50 border border-gray-300 text-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 ease-in-out"
+                            className="w-full px-5 py-3 pl-12 bg-white text-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 ease-in-out placeholder-gray-500"
                         />
-                        <Search className="absolute left-4 top-3 h-6 w-6 text-gray-400 pointer-events-none" />
+                        <Search className="absolute left-4 top-3 h-6 w-6 text-gray-500 pointer-events-none" />
                     </div>
                 </div>
+
 
                 {filteredPills.length === 0 ? (
                     <p className="text-center text-gray-600 text-lg">No pills found.</p>
@@ -103,11 +104,10 @@ const PillList = ({ newPill }) => {
                         <button
                             key={index}
                             onClick={() => paginate(index + 1)}
-                            className={`mx-1 px-3 py-1 rounded-md ${
-                                currentPage === index + 1
+                            className={`mx-1 px-3 py-1 rounded-md ${currentPage === index + 1
                                     ? "bg-blue-500 text-white"
                                     : "bg-white text-gray-700 hover:bg-gray-100"
-                            } border border-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out`}
+                                } border border-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out`}
                         >
                             {index + 1}
                         </button>
