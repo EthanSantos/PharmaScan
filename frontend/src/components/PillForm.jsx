@@ -1,36 +1,40 @@
-import React, { useState } from "react"
-import api from "../services/api"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faCheckCircle, faExclamationCircle, faCloudUploadAlt } from "@fortawesome/free-solid-svg-icons"
+import React, { useState } from "react";
+import api from "../services/api";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheckCircle, faExclamationCircle, faCloudUploadAlt } from "@fortawesome/free-solid-svg-icons";
 
-const PillForm = ({ closeModal }) => {
-    const [name, setName] = useState("")
-    const [image, setImage] = useState(null)
-    const [success, setSuccess] = useState("")
-    const [error, setError] = useState("")
+const PillForm = ({ closeModal, fetchPills }) => {
+    const [name, setName] = useState("");
+    const [image, setImage] = useState(null);
+    const [success, setSuccess] = useState("");
+    const [error, setError] = useState("");
 
     const handleSubmit = async (e) => {
-        e.preventDefault()
-        setSuccess("")
-        setError("")
+        e.preventDefault();
+        setSuccess("");
+        setError("");
 
-        const formData = new FormData()
-        formData.append("name", name)
+        const formData = new FormData();
+        formData.append("name", name);
         if (image) {
-            formData.append("image", image)
+            formData.append("image", image);
         }
 
         try {
-            await api.post("/upload", formData)
-            setSuccess("Pill uploaded successfully!")
+            const response = await api.post("/upload", formData); // Call the backend
+            const { message, image_url } = response.data;
+
+            setSuccess(message);
             setTimeout(() => {
-                setSuccess("")
-                closeModal()
-            }, 2000)
+                setSuccess("");
+                closeModal();
+                fetchPills(); // Refresh pill list
+            }, 2000);
         } catch (err) {
-            setError("Failed to upload pill. Please try again.")
+            setError("Failed to upload pill. Please try again.");
+            console.error(err);
         }
-    }
+    };
 
     return (
         <div className="space-y-6">
@@ -92,7 +96,7 @@ const PillForm = ({ closeModal }) => {
                 </p>
             )}
         </div>
-    )
-}
+    );
+};
 
-export default PillForm
+export default PillForm;
