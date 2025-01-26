@@ -26,59 +26,63 @@ const HomePage = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white flex flex-col items-center justify-center p-6">
-            <div className="w-full max-w-md bg-white rounded-2xl shadow-2xl p-8 space-y-8">
-                {/* Greeting Section */}
-                <div className="text-center">
-                    <h1 className="text-4xl font-bold text-gray-800 mb-4">
-                        Hello, <span className="text-blue-600">{userName}!</span>
-                    </h1>
-                    <p className="text-gray-500 text-sm">
-                        Manage your medications with ease and precision
-                    </p>
-                </div>
+        <div className="min-h-screen bg-white flex flex-col items-center justify-center p-6 overflow-hidden relative">
+            {/* Logout Button in Top Right */}
+            <button
+                onClick={handleLogout}
+                className="absolute top-6 right-6 text-gray-600 hover:text-gray-900 transition-colors flex items-center"
+            >
+                <LogOutIcon className="w-5 h-5 mr-2" />
+                Logout
+            </button>
 
-                {/* Action Buttons */}
-                <div className="grid grid-cols-2 gap-4">
-                    <Link
+            <div className="w-full max-w-md text-center mb-8">
+                {/* Greeting */}
+                <h1 className="text-4xl font-semibold text-gray-900 tracking-tight">
+                    Hello, <span className="text-blue-600">{userName}</span>
+                </h1>
+                <p className="text-gray-500 mt-4 text-lg">
+                    Intelligent Medication Tracking
+                </p>
+            </div>
+
+            <div className="w-full max-w-md space-y-6">
+                <div className="grid grid-cols-2 gap-6">
+                    <Link 
                         to="/upload"
-                        className="flex flex-col items-center justify-center p-5 bg-blue-50 hover:bg-blue-100 rounded-xl transition-all group"
+                        className="bg-white border border-gray-200 rounded-2xl p-6 text-center shadow-xl hover:shadow-2xl transition-all transform hover:-translate-y-2 group"
                     >
-                        <PillIcon 
-                            className="w-10 h-10 text-blue-600 mb-2 group-hover:scale-110 transition-transform" 
-                            strokeWidth={1.5} 
-                        />
-                        <span className="text-blue-800 font-semibold">
-                            Pills Database
-                        </span>
+                        <div className="bg-blue-50 w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center">
+                            <PillIcon 
+                                className="w-8 h-8 text-blue-600 group-hover:scale-110 transition-transform" 
+                                strokeWidth={1.5} 
+                            />
+                        </div>
+                        <h3 className="text-xl font-semibold text-gray-800">
+                            Pill Database
+                        </h3>
+                        <p className="text-gray-500 text-sm mt-2">
+                            Manage your medications
+                        </p>
                     </Link>
 
-                    <Link
+                    <Link 
                         to="/camera"
-                        className="flex flex-col items-center justify-center p-5 bg-green-50 hover:bg-green-100 rounded-xl transition-all group"
+                        className="bg-white border border-gray-200 rounded-2xl p-6 text-center shadow-xl hover:shadow-2xl transition-all transform hover:-translate-y-2 group"
                     >
-                        <CameraIcon 
-                            className="w-10 h-10 text-green-600 mb-2 group-hover:scale-110 transition-transform" 
-                            strokeWidth={1.5} 
-                        />
-                        <span className="text-green-800 font-semibold">
-                            Open Camera
-                        </span>
+                        <div className="bg-green-50 w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center">
+                            <CameraIcon 
+                                className="w-8 h-8 text-green-600 group-hover:scale-110 transition-transform" 
+                                strokeWidth={1.5} 
+                            />
+                        </div>
+                        <h3 className="text-xl font-semibold text-gray-800">
+                            Scan Pill
+                        </h3>
+                        <p className="text-gray-500 text-sm mt-2">
+                            Identify medications
+                        </p>
                     </Link>
-                </div>
-
-                {/* Logout Button */}
-                <div className="text-center">
-                    <button
-                        onClick={handleLogout}
-                        className="flex items-center justify-center w-full py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors group"
-                    >
-                        <LogOutIcon 
-                            className="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform" 
-                            strokeWidth={2} 
-                        />
-                        Logout
-                    </button>
                 </div>
             </div>
         </div>
