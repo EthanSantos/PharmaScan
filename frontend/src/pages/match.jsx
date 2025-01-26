@@ -95,7 +95,7 @@ export default function CompareMedicinePage() {
                     console.log("Fetched pill description:", data?.description);
                     setPillDescription(data?.description || "No description available.");
                 }
-                
+
                 console.log(aiResponse.choices[0].message.content);
                 if (aiResponse.choices[0].message.content === "true") {
                     setIsMatch(true);
@@ -141,92 +141,84 @@ export default function CompareMedicinePage() {
                         </p>
                     </div>
                 ) : (
-                    <>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl mx-auto">
-                            {/* First Image */}
-                            <div className="flex flex-col items-center bg-white p-6 rounded shadow-lg border border-gray-200">
-                                <h3 className="text-lg font-medium text-gray-700 mb-4">
-                                    Captured Image
-                                </h3>
+                    <div className="flex flex-col items-center justify-center w-full max-w-4xl mx-auto space-y-8">
+                        {/* Image Comparison */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
+                            <div className="bg-white p-6 rounded-lg shadow-lg border border-gray-200 flex flex-col items-center">
+                                <h3 className="text-lg font-medium text-gray-700 mb-4">Captured Image</h3>
                                 {image ? (
                                     <img
                                         src={image}
                                         alt="Captured Medicine"
-                                        className="rounded shadow-md w-64 h-64 object-cover"
+                                        className="rounded-lg shadow-md w-64 h-64 object-cover"
                                     />
                                 ) : (
-                                    <p>No image found</p>
+                                    <p className="text-gray-500">No image found</p>
                                 )}
                             </div>
-
-                            {/* Second Image */}
-                            <div className="flex flex-col items-center bg-white p-6 rounded shadow-lg border border-gray-200">
-                                <h3 className="text-lg font-medium text-gray-700 mb-4">
-                                    Database Image
-                                </h3>
+                            <div className="bg-white p-6 rounded-lg shadow-lg border border-gray-200 flex flex-col items-center">
+                                <h3 className="text-lg font-medium text-gray-700 mb-4">Database Image</h3>
                                 {image2 ? (
                                     <img
                                         src={image2}
                                         alt="Database Medicine"
-                                        className="rounded shadow-md w-64 h-64 object-cover"
+                                        className="rounded-lg shadow-md w-64 h-64 object-cover"
                                     />
                                 ) : (
-                                    <p>No image from DB</p>
+                                    <p className="text-gray-500">No image from DB</p>
                                 )}
                             </div>
                         </div>
 
                         {/* Medicine Information */}
-                        <div className="mt-8 w-full max-w-2xl mx-auto bg-white p-8 rounded shadow-lg border border-gray-200">
-                            <h2 className="text-xl font-semibold text-gray-700 mb-2">
-                                Medicine: {medicine}
-                            </h2>
+                        <div className="bg-white p-8 rounded-lg shadow-lg border border-gray-200 w-full">
+                            <h2 className="text-xl font-semibold text-gray-700 mb-2">Medicine: {medicine}</h2>
                             <p className="text-gray-600 mb-4">
                                 <strong>Description:</strong> {pillDescription || "No description available."}
                             </p>
                         </div>
 
-                        {/* Error Box for "Not a Match" */}
-                        {isMatch === false && (
-                            <div className="mt-6 w-full max-w-2xl mx-auto bg-red-100 p-6 rounded shadow-lg border border-red-300">
-                                <h2 className="text-lg font-bold text-red-800 mb-4">
-                                    ❌ The images do not match!
-                                </h2>
-                                <p className="text-red-700">
-                                    Please verify the pills and try again.
-                                </p>
-                            </div>
-                        )}
-
-                        {isMatch === true && (
-                            <div className="mt-6 w-full max-w-2xl mx-auto bg-green-100 p-6 rounded shadow-lg border border-green-300">
-                                <h2 className="text-lg font-bold text-green-800 mb-4">
-                                    ✅ The images match!
-                                </h2>
-                                <p className="text-green-700">
-                                    The pills in the images have been successfully verified.
-                                </p>
+                        {/* Result Box */}
+                        {isMatch !== null && (
+                            <div
+                                className={`p-6 rounded-lg shadow-lg border w-full max-w-2xl ${isMatch
+                                        ? "bg-green-100 border-green-300 text-green-800"
+                                        : "bg-red-100 border-red-300 text-red-800"
+                                    }`}
+                            >
+                                {isMatch === true && (
+                                    <>
+                                        <h2 className="text-lg font-bold mb-4">✅ The images match!</h2>
+                                        <p>The pills in the images have been successfully verified.</p>
+                                    </>
+                                )}
+                                {isMatch === false && (
+                                    <>
+                                        <h2 className="text-lg font-bold mb-4">❌ The images do not match!</h2>
+                                        <p>Please verify the pills and try again.</p>
+                                    </>
+                                )}
                             </div>
                         )}
 
                         {/* Navigation Buttons */}
-                        <div className="flex justify-center mt-6 gap-4">
+                        <div className="flex justify-center gap-4">
                             <button
                                 onClick={handleGoBack}
-                                className="bg-gray-500 text-white py-3 px-10 rounded shadow-md hover:bg-gray-600 transition transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-gray-300"
+                                className="bg-gray-500 text-white py-3 px-10 rounded-lg shadow-md hover:bg-gray-600 transition transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-gray-300"
                             >
                                 Go Back
                             </button>
                             {isMatch === true && (
                                 <button
                                     onClick={handleNextStep}
-                                    className="bg-blue-500 text-white py-3 px-10 rounded shadow-md hover:bg-blue-600 transition transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300"
+                                    className="bg-blue-500 text-white py-3 px-10 rounded-lg shadow-md hover:bg-blue-600 transition transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300"
                                 >
                                     Next Step
                                 </button>
                             )}
                         </div>
-                    </>
+                    </div>
                 )}
             </div>
         </div>
