@@ -7,6 +7,7 @@ import {
     CameraIcon,
     HomeIcon,
 } from "lucide-react";
+import PharmascanLogo from "../assets/PharmascanLogo.png"
 
 const NavBar = () => {
     const navigate = useNavigate();
@@ -38,7 +39,24 @@ const NavBar = () => {
         >
             {/* Brand / App Title */}
             <div className="h-16 flex items-center px-4">
-                <h1 className="text-xl font-semibold text-blue-600">PharmaScan</h1>
+                {/* Logo */}
+                <img
+                    src={PharmascanLogo}
+                    alt="PharmaScan Logo"
+                    className="
+                        h-8 w-8 
+                        mr-2 
+                        scale-90 
+                        filter 
+                        brightness-0 
+                        invert 
+                        text-blue-600
+                    "
+                    style={{ filter: "brightness(0) saturate(100%) sepia(100%) hue-rotate(190deg) saturate(600%) brightness(95%)" }}
+                />
+                <h1 className="text-xl font-semibold text-blue-600">
+                    PharmaScan
+                </h1>
             </div>
 
             {/* Small horizontal line under PharmaScan */}
