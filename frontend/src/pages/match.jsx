@@ -24,7 +24,9 @@ export default function CompareMedicinePage() {
     setLoading(true); // Set loading to true when data fetch starts
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/${medicine}`);
+        const response = await axios.get(
+          `http://localhost:5000/api/${medicine}`
+        );
         console.log(response.data[0]["image_url"]);
         setImage2(response.data[0]["image_url"]); // Set the second image when the first call succeeds
         // Effect for getting AI response after the second image is set
@@ -73,18 +75,21 @@ export default function CompareMedicinePage() {
 
     fetchData();
   }, [image, image2, medicine]); // This will run whenever `medicine` changes
-    api.get(`/${medicine}`)
-        .then((response) => {
-            console.log(response.data[0]["image_url"]);
-            setImage2(response.data[0]["image_url"]); // Update state with the image URL
-        })
-        .catch((err) => {
-            console.error(err); // Log any errors
-        });
+  api
+    .get(`/${medicine}`)
+    .then((response) => {
+      console.log(response.data[0]["image_url"]);
+      setImage2(response.data[0]["image_url"]); // Update state with the image URL
+    })
+    .catch((err) => {
+      console.error(err); // Log any errors
+    });
 
   return (
     <div className="min-h-screen bg-gray-100 p-8 flex flex-col items-center">
-      <h1 className="text-3xl font-bold text-gray-800 mb-6">Medicine Comparison</h1>
+      <h1 className="text-3xl font-bold text-gray-800 mb-6">
+        Medicine Comparison
+      </h1>
 
       {/* Show Loading Spinner */}
       {loading && (
@@ -102,7 +107,7 @@ export default function CompareMedicinePage() {
                 <img
                   src={image}
                   alt="First Medicine"
-                  className="mt-4 rounded-lg shadow-md"
+                  className="mt-4 rounded-lg shadow-md w-64 h-64 object-cover"
                 />
               )}
             </div>
@@ -112,7 +117,7 @@ export default function CompareMedicinePage() {
                 <img
                   src={image2}
                   alt="Second Medicine"
-                  className="mt-4 rounded-lg shadow-md w-full min-h-full"
+                  className="mt-4 rounded-lg shadow-md w-64 h-64 object-cover"
                 />
               )}
             </div>
@@ -136,7 +141,11 @@ export default function CompareMedicinePage() {
           {isMatch !== null && (
             <div
               className={`mt-6 p-4 w-full max-w-md text-center text-lg font-semibold rounded-lg shadow-lg 
-                        ${isMatch ? "bg-green-200 text-green-800" : "bg-red-200 text-red-800"}`}
+                        ${
+                          isMatch
+                            ? "bg-green-200 text-green-800"
+                            : "bg-red-200 text-red-800"
+                        }`}
             >
               {isMatch ? "The images match!" : "The images do not match!"}
             </div>
