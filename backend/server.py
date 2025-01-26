@@ -1,10 +1,12 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, Response
 import boto3
 import os
 import requests
 from werkzeug.utils import secure_filename
 from flask_cors import CORS
 from dotenv import load_dotenv
+import cv2
+from inference_sdk import InferenceHTTPClient
 
 # Load environment variables
 load_dotenv()
@@ -132,6 +134,90 @@ def delete_pill(pill_id):
         print(f"Error: {e}")
         return jsonify({"error": str(e)}), 500
 
+
+import cv2
+from inference_sdk import InferenceHTTPClient
+
+def count_pills_in_livefeed():
+    # Roboflow API setup
+    api_url = "https://detect.roboflow.com"
+    api_key = "K88U7a54DNUTEyLhMSeC"
+    model_id = "pills-detection-s9ywn/19"
+
+    # Initialize the Inference Client
+    client = InferenceHTTPClient(
+        api_url=api_url,
+        api_key=api_key
+    )
+
+    # Open webcam (0 for default camera)
+    cap = cv2.VideoCapture(0)
+
+    # Check if the webcam opened successfully
+    if not cap.isOpened():
+        print("Error: Could not open webcam.")
+        exit()
+
+    while True:
+        # Read frame from webcam
+        ret, frame = cap.read()
+        if not ret:
+            print("Error: Failed to capture image.")
+            break
+
+        # Send the captured frame to Roboflow for inference
+        result = client.infer(frame, model_id=model_id)
+        
+        # Get results (e.g., detected pills)
+        boxes = result["predictions"]
+        
+        # Draw bounding boxes on the frame for detected objects
+        for box in boxes:
+            x, y, w, h = box['x'], box['y'], box['width'], box['height']
+            label = box['class']
+            confidence = box['confidence']
+            
+            # Draw rectangle around the detected pill
+            cv2.rectangle(frame, (int(x - w/2), int(y - h/2)), (int(x + w/2), int(y + h/2)), (0, 255, 0), 2)
+            cv2.putText(frame, f'{label}: {confidence:.2f}', (int(x - w/2), int(y - h/2) - 10),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+
+        # Count the number of pills detected
+        pill_count = len(boxes)
+        print(pill_count)
+        _, buffer = cv2.imencode('.jpg', frame)
+        frame_bytes = buffer.tobytes()
+
+        # Yield the frame as part of an MJPEG stream
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n\r\n' + frame_bytes + b'\r\n')
+
+        # Display the pill count on the frame
+        cv2.putText(frame, f'Pills Detected: {pill_count}', (10, 30),
+                    cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 255), 2)  # Yellow text for the count
+
+        # Show the processed frame with detected pills and count
+        cv2.imshow("Pill Detection", frame)
+
+        # Break the loop if 'q' is pressed
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+
+    # Release webcam and close all OpenCV windows
+    cap.release()
+    cv2.destroyAllWindows()
+
+
+
+@app.route('/video_feed')
+def video_feed():
+    """Route to serve the video feed"""
+    return Response(count_pills_in_livefeed(),
+                    mimetype='multipart/x-mixed-replace; boundary=frame')
+
+# @app.route('/pill_count')
+# def pill_count():
+#     return jsonify({"pill_count":count_pills_in_livefeed()})
 
 if __name__ == "__main__":
     app.run(debug=True)
