@@ -45,6 +45,49 @@ def upload_pill():
         print(f"Received name: {name}")
         print(f"Received file: {file.filename}")
 
+        # Upload image to S3 with public-read ACL
+        filename = secure_filename(file.filename)
+        s3.upload_fileobj(
+            file,
+            BUCKET_NAME,
+            filename,
+            ExtraArgs={"ContentType": file.content_type},
+        )
+
+
+        # Construct the public URL
+        file_url = f"https://{BUCKET_NAME}.s3.us-west-1.amazonaws.com/{filename}"
+        print(f"Public URL generated: {file_url}")
+
+        # Store pill info in Supabase
+        payload = {"name": name, "image_url": file_url}
+        supabase_response = requests.post(
+            f"{SUPABASE_URL}/rest/v1/{SUPABASE_TABLE}",
+            headers=supabase_headers,
+            json=payload,
+        )
+
+        if supabase_response.status_code != 201:
+            print(f"Supabase Error: {supabase_response.json()}")
+            return jsonify({"error": "Failed to save pill info to Supabase"}), 500
+
+        return jsonify({"message": "Pill uploaded successfully", "image_url": file_url}), 200
+
+    except Exception as e:
+        print(f"Error: {e}")
+        return jsonify({"error": str(e)}), 500
+
+    try:
+        # Get form data
+        name = request.form.get("name")
+        file = request.files.get("image")
+
+        if not name or not file:
+            return jsonify({"error": "Missing name or image"}), 400
+
+        print(f"Received name: {name}")
+        print(f"Received file: {file.filename}")
+
         # Upload image to S3
         filename = secure_filename(file.filename)
         s3.upload_fileobj(
