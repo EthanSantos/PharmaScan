@@ -1,16 +1,18 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, Response
 import boto3
 import os
 import requests
 from werkzeug.utils import secure_filename
 from flask_cors import CORS
 from dotenv import load_dotenv
+import cv2
+from inference_sdk import InferenceHTTPClient
 
 # Load environment variables
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/api/*": {"origins": ["http://localhost:5173"]}})
 
 # AWS S3 Configuration
 s3 = boto3.client(
@@ -132,6 +134,67 @@ def delete_pill(pill_id):
         print(f"Error: {e}")
         return jsonify({"error": str(e)}), 500
 
+pill_count = 0
+
+def count_pills_in_livefeed():
+    global pill_count  # Access the global pill count
+    # Roboflow API setup
+    api_url = "https://detect.roboflow.com"
+    api_key = "K88U7a54DNUTEyLhMSeC"
+    model_id = "pills-detection-s9ywn/19"
+
+    client = InferenceHTTPClient(
+        api_url=api_url,
+        api_key=api_key
+    )
+
+    cap = cv2.VideoCapture(1)
+
+    if not cap.isOpened():
+        print("Error: Could not open webcam.")
+        return
+
+    while True:
+        ret, frame = cap.read()
+        if not ret:
+            print("Error: Failed to capture image.")
+            break
+
+        # Send frame for inference
+        result = client.infer(frame, model_id=model_id)
+        boxes = result["predictions"]
+
+        # Update global pill count
+        pill_count = len(boxes)
+
+        # Draw bounding boxes
+        for box in boxes:
+            x, y, w, h = box['x'], box['y'], box['width'], box['height']
+            label = box['class']
+            confidence = box['confidence']
+
+            cv2.rectangle(frame, (int(x - w/2), int(y - h/2)), (int(x + w/2), int(y + h/2)), (0, 255, 0), 2)
+            cv2.putText(frame, f'{label}: {confidence:.2f}', (int(x - w/2), int(y - h/2) - 10),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+
+        _, buffer = cv2.imencode('.jpg', frame)
+        frame_bytes = buffer.tobytes()
+
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n\r\n' + frame_bytes + b'\r\n')
+
+    cap.release()
+
+@app.route('/video_feed')
+def video_feed():
+    """Stream the video feed"""
+    return Response(count_pills_in_livefeed(),
+                    mimetype='multipart/x-mixed-replace; boundary=frame')
+
+@app.route('/api/pill_count', methods=['GET'])
+def get_pill_count():
+    global pill_count
+    return jsonify({"pill_count": pill_count})
 
 if __name__ == "__main__":
     app.run(debug=True)
