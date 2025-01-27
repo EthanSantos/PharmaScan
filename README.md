@@ -22,6 +22,10 @@
 ## Video Demo
 
 
+https://github.com/user-attachments/assets/686e1fd7-005f-4888-919d-41841790dce5
+
+
+
 ## Inspiration
 PharmaScan was inspired by the real-world challenges faced by one of our teammate's aunts, who works in a pharmacy. She relies solely on pill colors to differentiate medications when preparing prescriptions, which can lead to errors and inefficiencies. Additionally, the physical and mental fatigue from long work hours highlighted the need for a more efficient and reliable solution. PharmaScan aims to reduce human error, enhance accuracy, and support pharmacy professionals in their daily tasks.
 
