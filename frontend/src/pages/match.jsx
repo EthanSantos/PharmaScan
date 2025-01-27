@@ -188,13 +188,13 @@ export default function CompareMedicinePage() {
                             >
                                 {isMatch === true && (
                                     <>
-                                        <h2 className="text-lg font-bold mb-4">✅ The images match!</h2>
+                                        <h2 className="text-lg font-bold mb-4">The images match!</h2>
                                         <p>The pills in the images have been successfully verified.</p>
                                     </>
                                 )}
                                 {isMatch === false && (
                                     <>
-                                        <h2 className="text-lg font-bold mb-4">❌ The images do not match!</h2>
+                                        <h2 className="text-lg font-bold mb-4">The images do not match!</h2>
                                         <p>Please verify the pills and try again.</p>
                                     </>
                                 )}

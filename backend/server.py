@@ -139,9 +139,9 @@ pill_count = 0
 def count_pills_in_livefeed():
     global pill_count  # Access the global pill count
     # Roboflow API setup
-    api_url = "https://detect.roboflow.com"
-    api_key = "K88U7a54DNUTEyLhMSeC"
-    model_id = "pills-detection-s9ywn/19"
+    api_url="https://detect.roboflow.com/"
+    api_key="uDVEdueE7qDaS3RvtnVl"
+    model_id="kkh7-pill-counting/1"
 
     client = InferenceHTTPClient(
         api_url=api_url,
